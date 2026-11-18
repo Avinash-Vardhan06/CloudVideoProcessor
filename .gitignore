@@ -1,0 +1,16 @@
+
+.venv/
+__pycache__/
+*.pyc
+
+serviceAccountKey.json
+.env
+
+uploads/
+processed/
+thumbnails/
+
+.firebase/
+
+test_video.mp4
+test_thumbnail.jpg

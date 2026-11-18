@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudVideoProcessor Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f5fc;
+            color: #172b4d;
+        }
+
+        header {
+            background: #193b70;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #193b70;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            margin-top: 0;
+        }
+
+        .connected {
+            color: #16834b;
+            font-weight: bold;
+        }
+
+        .upload-area {
+            border: 2px dashed #8ba8d8;
+            border-radius: 12px;
+            padding: 30px 15px;
+            text-align: center;
+            background: #f8faff;
+        }
+
+        input[type="file"] {
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: white;
+            margin: 5px;
+        }
+
+        .secondary-btn {
+            background: #16834b;
+            color: white;
+            margin: 5px;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .success {
+            color: #16834b;
+        }
+
+        .error {
+            color: #d93025;
+        }
+
+        #thumbnailPreview {
+            display: none;
+            margin: 20px auto;
+            max-width: 100%;
+            width: 480px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000020;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+        }
+
+        .tool-card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px #0000000c;
+        }
+
+        .tool-card h3 {
+            color: #2056ad;
+            margin-top: 0;
+        }
+
+        .coming {
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media(max-width: 600px) {
+            header {
+                padding: 16px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>☁ CloudVideoProcessor</h2>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+</header>
+
+<main>
+
+    <!-- USER PROFILE -->
+    <section class="card welcome">
+        <h1>Welcome, <span id="userName">User</span> 👋</h1>
+        <p>Your personal video processing workspace.</p>
+        <p>Email: <strong id="userEmail">Loading...</strong></p>
+        <p class="connected">● Account connected</p>
+    </section>
+
+
+    <!-- VIDEO UPLOAD -->
+    <section class="card">
+
+        <h2>📤 Upload Your Video</h2>
+
+        <div class="upload-area">
+
+            <h3>Select a video from your computer</h3>
+
+            <p>Supported: MP4, MOV, AVI, MKV, WEBM</p>
+
+            <input
+                type="file"
+                id="videoInput"
+                accept="video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm,video/*"
+            >
+
+            <p id="selectedFile">No video selected</p>
+
+            <button class="primary-btn" id="uploadBtn">
+                Upload Video
+            </button>
+
+            <p id="uploadMessage" class="message"></p>
+
+        </div>
+
+    </section>
+
+
+    <!-- THUMBNAIL GENERATION -->
+    <section class="card">
+
+        <h2>🖼 Generate Thumbnail</h2>
+
+        <p>Extract a frame from your uploaded video to create a JPG thumbnail.</p>
+
+        <button
+            class="secondary-btn"
+            id="thumbnailBtn"
+            disabled
+        >
+            Generate Thumbnail
+        </button>
+
+        <p id="thumbnailMessage" class="message">
+            Upload a video first.
+        </p>
+
+        <img
+            id="thumbnailPreview"
+            alt="Generated video thumbnail"
+        >
+
+        <p id="thumbnailFilename"></p>
+
+    </section>
+
+
+    <!-- OTHER PROCESSING TOOLS -->
+    <h2>Video Processing Tools</h2>
+
+    <section class="tools-grid">
+
+        <div class="tool-card">
+            <h3>✂ Trim Video</h3>
+            <p>Cut your video to the required duration.</p>
+            <p class="coming">Coming next.</p>
+        </div>
+
+        <div class="tool-card">
+            <h3>📦 Compress Video</h3>
+            <p>Reduce your video file size.</p>
+            <p class="coming">Coming next.</p>
+        </div>
+
+        <div class="tool-card">
+            <h3>🔄 Rotate Video</h3>
+            <p>Change video orientation.</p>
+            <p class="coming">Coming next.</p>
+        </div>
+
+        <div class="tool-card">
+            <h3>⚡ Change Speed</h3>
+            <p>Adjust video playback speed.</p>
+            <p class="coming">Coming next.</p>
+        </div>
+
+        <div class="tool-card">
+            <h3>📐 Resize Video</h3>
+            <p>Change video resolution.</p>
+            <p class="coming">Coming next.</p>
+        </div>
+
+        <div class="tool-card">
+            <h3>📁 My Videos</h3>
+            <p>View uploaded and processed videos.</p>
+            <p class="coming">Coming next.</p>
+        </div>
+
+    </section>
+
+</main>
+
+
+<script type="module">
+
+    import {
+        observeAuth,
+        getUserToken,
+        logoutUser
+    } from "/static/js/firebase.js";
+
+
+    const videoInput = document.getElementById("videoInput");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const thumbnailBtn = document.getElementById("thumbnailBtn");
+
+    const uploadMessage = document.getElementById("uploadMessage");
+    const thumbnailMessage = document.getElementById("thumbnailMessage");
+
+    const selectedFile = document.getElementById("selectedFile");
+    const thumbnailPreview = document.getElementById("thumbnailPreview");
+
+    let currentUser = null;
+    let uploadedVideoId = null;
+
+
+    // =====================================
+    // AUTHENTICATION AND PROFILE
+    // =====================================
+
+    observeAuth(async (user) => {
+
+        if (!user) {
+            window.location.href = "/login";
+            return;
+        }
+
+        currentUser = user;
+
+        document.getElementById("userEmail").textContent =
+            user.email || "Not available";
+
+        try {
+
+            const token = await user.getIdToken();
+
+            const response = await fetch("/api/me", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || "Profile loading failed");
+            }
+
+            document.getElementById("userName").textContent =
+                result.user?.name || "User";
+
+        } catch (error) {
+            console.error("Profile error:", error);
+        }
+
+    });
+
+
+    // =====================================
+    // SELECT VIDEO
+    // =====================================
+
+    videoInput.addEventListener("change", () => {
+
+        const file = videoInput.files[0];
+
+        uploadedVideoId = null;
+        thumbnailBtn.disabled = true;
+        thumbnailPreview.style.display = "none";
+
+        thumbnailMessage.textContent = "Upload this video first.";
+        thumbnailMessage.className = "message";
+
+        if (file) {
+            selectedFile.textContent = "Selected: " + file.name;
+        } else {
+            selectedFile.textContent = "No video selected";
+        }
+
+        uploadMessage.textContent = "";
+        uploadMessage.className = "message";
+
+    });
+
+
+    // =====================================
+    // UPLOAD VIDEO
+    // =====================================
+
+    uploadBtn.addEventListener("click", async () => {
+
+        const file = videoInput.files[0];
+
+        if (!file) {
+            uploadMessage.textContent = "Please select a video first.";
+            uploadMessage.className = "message error";
+            return;
+        }
+
+        if (file.size > 500 * 1024 * 1024) {
+            uploadMessage.textContent = "Maximum video size is 500 MB.";
+            uploadMessage.className = "message error";
+            return;
+        }
+
+        if (!currentUser) {
+            uploadMessage.textContent = "Please log in again.";
+            uploadMessage.className = "message error";
+            return;
+        }
+
+        uploadBtn.disabled = true;
+        uploadBtn.textContent = "Uploading...";
+
+        uploadMessage.textContent = "Uploading your video. Please wait...";
+        uploadMessage.className = "message";
+
+        try {
+
+            const token = await getUserToken();
+
+            const formData = new FormData();
+            formData.append("video", file);
+
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                },
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Upload failed");
+            }
+
+            uploadedVideoId = result.video.id;
+
+            uploadMessage.textContent = "✓ " + result.message;
+            uploadMessage.className = "message success";
+
+            selectedFile.textContent =
+                "Uploaded: " + result.video.filename;
+
+            thumbnailBtn.disabled = false;
+
+            thumbnailMessage.textContent =
+                "Your video is ready. Click Generate Thumbnail.";
+
+            thumbnailMessage.className = "message success";
+
+            thumbnailPreview.style.display = "none";
+
+        } catch (error) {
+
+            console.error(error);
+
+            uploadMessage.textContent = "Error: " + error.message;
+            uploadMessage.className = "message error";
+
+        } finally {
+
+            uploadBtn.disabled = false;
+            uploadBtn.textContent = "Upload Video";
+
+        }
+
+    });
+
+
+    // =====================================
+    // GENERATE THUMBNAIL
+    // =====================================
+
+    thumbnailBtn.addEventListener("click", async () => {
+
+        if (!uploadedVideoId) {
+            thumbnailMessage.textContent = "Please upload a video first.";
+            thumbnailMessage.className = "message error";
+            return;
+        }
+
+        thumbnailBtn.disabled = true;
+        thumbnailBtn.textContent = "Generating...";
+
+        thumbnailMessage.textContent =
+            "Generating thumbnail. Please wait...";
+
+        thumbnailMessage.className = "message";
+
+        thumbnailPreview.style.display = "none";
+
+        try {
+
+            const token = await getUserToken();
+
+            const response = await fetch("/api/thumbnail", {
+
+                method: "POST",
+
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    video_id: uploadedVideoId
+                })
+
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.message || "Thumbnail generation failed");
+            }
+
+            thumbnailPreview.src = result.thumbnail;
+            thumbnailPreview.style.display = "block";
+
+            thumbnailMessage.textContent =
+                "✓ " + result.message;
+
+            thumbnailMessage.className = "message success";
+
+            document.getElementById("thumbnailFilename").textContent =
+                "Saved as: " + result.filename;
+
+        } catch (error) {
+
+            console.error(error);
+
+            thumbnailMessage.textContent =
+                "Error: " + error.message;
+
+            thumbnailMessage.className = "message error";
+
+        } finally {
+
+            thumbnailBtn.disabled = false;
+            thumbnailBtn.textContent = "Generate Thumbnail";
+
+        }
+
+    });
+
+
+    // =====================================
+    // LOGOUT
+    // =====================================
+
+    document.getElementById("logoutBtn")
+        .addEventListener("click", async () => {
+
+            try {
+                await logoutUser();
+                window.location.href = "/login";
+
+            } catch (error) {
+                alert("Logout failed: " + error.message);
+            }
+
+        });
+
+</script>
+
+</body>
+</html>
