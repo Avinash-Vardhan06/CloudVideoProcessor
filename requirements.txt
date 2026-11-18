@@ -2,3 +2,4 @@ Flask
 firebase-admin
 Pillow
 imageio-ffmpeg
+gunicorn
